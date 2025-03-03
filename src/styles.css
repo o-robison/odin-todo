@@ -1,0 +1,16 @@
+div {
+    border: 1px solid rebeccapurple;
+}
+
+#content {
+    display: flex;
+}
+
+.label-value {
+    display: flex;
+    flex-direction: column;
+}
+
+.expandable {
+    display: flex;
+}

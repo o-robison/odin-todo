@@ -40,6 +40,7 @@ export class ScreenController {
     }
     drawLabelValue(target, label, value) {
         const containerDiv = document.createElement("div");
+        containerDiv.classList.add("label-value");
         const labelDiv = document.createElement("div");
         labelDiv.classList.add("label");
         labelDiv.innerHTML = label;
