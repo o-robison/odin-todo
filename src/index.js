@@ -1,11 +1,14 @@
 import "./reset.css";
 import "./styles.css";
+import { ProjectList } from "./todo.js";
+import { ScreenController } from "./ui.js";
 
-import { Project } from "./todo.js";
 
-
-///////////////////////////////////////////////////////////////////////////////////
-const myProject = new Project("test");
+/////////////////////////////
+const myProjectList = new ProjectList();
+myProjectList.addProject("Home");
 const today = new Date();
-myProject.addTodo("test one", "this is a test", today, "low");
-console.log(myProject);
+myProjectList.addTodoToProject(1, "title", "desc", today, "low", "");
+
+const screenController = new ScreenController("#content");
+screenController.draw(myProjectList);
