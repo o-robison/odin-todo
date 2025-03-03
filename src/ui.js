@@ -1,5 +1,3 @@
-import { ProjectList } from "./todo.js";
-
 export class ScreenController {
     constructor(target) {
         this._contentDiv = document.querySelector(target);
@@ -18,13 +16,38 @@ export class ScreenController {
             listDiv.appendChild(listTitle);
             
             for(const todo of project.todoList) {
-                const listItem = document.createElement("div");
-                listItem.classList.add("todo-item");
-                listItem.innerHTML = todo.title;
-                listDiv.appendChild(listItem);
+                const todoDiv = document.createElement("div");
+                todoDiv.classList.add("todo-item");
+                
+                const todoTitle = document.createElement("h3");
+                todoTitle.innerHTML = todo.title;
+                todoDiv.appendChild(todoTitle);
+
+                const expandDiv = document.createElement("div");
+                expandDiv.classList.add("expandable");
+                
+                this.drawLabelValue(expandDiv, "Description:", todo.description);
+                this.drawLabelValue(expandDiv, "Due Date:", todo.dueDate);
+                this.drawLabelValue(expandDiv, "Priority:", todo.priority);
+                this.drawLabelValue(expandDiv, "Notes:", todo.notes);
+
+                todoDiv.appendChild(expandDiv);
+                listDiv.appendChild(todoDiv);
             }
             listDiv.appendChild(list);
             this._contentDiv.appendChild(listDiv);
         }
+    }
+    drawLabelValue(target, label, value) {
+        const containerDiv = document.createElement("div");
+        const labelDiv = document.createElement("div");
+        labelDiv.classList.add("label");
+        labelDiv.innerHTML = label;
+        containerDiv.appendChild(labelDiv);
+        const valueDiv = document.createElement("div");
+        valueDiv.classList.add("value");
+        valueDiv.innerHTML = value;
+        containerDiv.appendChild(valueDiv);
+        target.appendChild(containerDiv);
     }
 }
