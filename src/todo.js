@@ -41,13 +41,15 @@ class Project {
 
     addTodo(title, description, dueDate, priority, notes) {
         const newTodo = new Todo(title, description, dueDate, priority, notes);
-        this._todoList.push(newTodo);
+        this.todoList.push(newTodo);
     }
     completeTodo(index) {
-        this._todoList[index].isDone = true;
+        this.todoList[index].isDone = true;
     }
     removeTodo(index) {
-        this._todoList.splice(index, 1);
+        console.log(this.todoList);
+        this.todoList.splice(index, 1);
+        console.log(this.todoList);
     }
 }
 
@@ -61,11 +63,15 @@ export class ProjectList {
     }
 
     addProject(name) {
-        this._projects.push(new Project(name));
+        this.projects.push(new Project(name));
     }
 
     addTodoToProject(projectIndex, title, description, dueDate, priority, notes) {
-        const targetProject = this._projects[projectIndex];
+        const targetProject = this.projects[projectIndex];
         targetProject.addTodo(title, description, dueDate, priority, notes);
+    }
+
+    removeTodoFromProject(projectIndex, todoIndex) {
+        this.projects[projectIndex].removeTodo(todoIndex);
     }
 }

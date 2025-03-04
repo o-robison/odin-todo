@@ -1,13 +1,20 @@
 export class ScreenController {
-    constructor(target) {
+    constructor(target, projectList) {
         this._contentDiv = document.querySelector(target);
+        this._projectList = projectList;
+    }
+    get projectList() {
+        return this._projectList;
+    }
+    get contentDiv() {
+        return this._contentDiv;
     }
 
     reset() {
-        this._contentDiv.innerHTML = "";
+        this.contentDiv.innerHTML = "";
     }
-    draw(projectList) {
-        for(const [projIndex, project] of projectList.projects.entries()) {
+    draw() {
+        for(const [projIndex, project] of this.projectList.projects.entries()) {
             const listDiv = document.createElement("div");
             listDiv.classList.add("project");
             const listTitle = document.createElement("h2");
@@ -22,14 +29,12 @@ export class ScreenController {
                 
                 const todoTitleDiv = document.createElement("div");
                 todoTitleDiv.classList.add("todo-title");
-                const listenButton = this.drawMaterialIconButton(todoTitleDiv, "expand_circle_down", projIndex, listIndex);
-                console.log(listenButton);
-                listenButton.addEventListener("click", this.toggleExpandableVisibility);
+                const listenButton = this.drawMaterialIconButton(todoTitleDiv, "expand_circle_down", projIndex, listIndex, this.toggleExpandableVisibility);
 
                 const buttonRow = document.createElement("div");
                 buttonRow.classList.add("button-row");
-                this.drawMaterialIconButton(buttonRow, "edit", projIndex, listIndex);
-                this.drawMaterialIconButton(buttonRow, "remove", projIndex, listIndex);
+                this.drawMaterialIconButton(buttonRow, "edit", projIndex, listIndex, this.editTodo.bind(this));
+                this.drawMaterialIconButton(buttonRow, "remove", projIndex, listIndex, this.removeTodo.bind(this));
 
                 const todoTitle = document.createElement("h3");
                 todoTitle.innerHTML = todo.title;
@@ -50,7 +55,7 @@ export class ScreenController {
                 listDiv.appendChild(todoDiv);
             }
             listDiv.appendChild(list);
-            this._contentDiv.appendChild(listDiv);
+            this.contentDiv.appendChild(listDiv);
         }
     }
     drawLabelValue(target, label, value) {
@@ -66,20 +71,29 @@ export class ScreenController {
         containerDiv.appendChild(valueDiv);
         target.appendChild(containerDiv);
     }
-    drawMaterialIconButton(target, iconName, projIndex, listIndex) {
+    drawMaterialIconButton(target, iconName, projIndex, listIndex, callback) {
         const myButton = document.createElement("button");
         myButton.classList.add("icon-button");
         myButton.classList.add("material-symbols-outlined");
         myButton.textContent = iconName;
         myButton.dataset.todoIndex = `${projIndex}${listIndex}`;
+        myButton.addEventListener("click", callback);
         target.appendChild(myButton);
-        return myButton;
     }
     toggleExpandableVisibility(e) {
         const index = e.currentTarget.dataset.todoIndex;
         const target = document.querySelector(`.expandable[data-todo-index="${index}"]`);
-        console.log(target);
         if(target.style.display === "flex") target.style.display = "none";
         else target.style.display = "flex";
+    }
+    removeTodo(e){
+        const indexStr = e.currentTarget.dataset.todoIndex;
+        const indexArray = indexStr.split("");
+        this.projectList.removeTodoFromProject(indexArray[0], indexArray[1]);
+        this.reset();
+        this.draw();
+    }
+    editTodo(e){
+        console.log("edit");
     }
 }

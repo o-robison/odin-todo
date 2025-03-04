@@ -12,5 +12,5 @@ myProjectList.addTodoToProject(1, "myTName", "desc", today.toLocaleDateString(),
 myProjectList.addTodoToProject(0, "finish this project", "description", today.toLocaleDateString(), "high", "notes");
 myProjectList.addTodoToProject(0, "finish this project2", "description2", today.toLocaleDateString(), "high", "notes");
 
-const screenController = new ScreenController("#content");
-screenController.draw(myProjectList);
+const screenController = new ScreenController("#content", myProjectList);
+screenController.draw();
