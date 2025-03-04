@@ -94,6 +94,17 @@ export class ScreenController {
         this.draw();
     }
     editTodo(e){
-        console.log("edit");
+        //show edit window
+        const indexStr = e.currentTarget.dataset.todoIndex;
+        const indexArray = indexStr.split("");
+        const title = "testTitle";
+        const desc = "test description";
+        const date = new Date().toLocaleDateString();
+        const priority = "test priority";
+        const note = "test note";
+        const isDone = true;
+        this.projectList.editTodoInProject(indexArray[0], indexArray[1], title, desc, date, priority, note, isDone);
+        this.reset();
+        this.draw();
     }
 }

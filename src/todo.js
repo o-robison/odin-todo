@@ -10,17 +10,32 @@ class Todo {
     get title() {
         return this._title;
     }
+    set title(title) {
+        this._title = title;
+    }
     get description() {
         return this._description;
+    }
+    set description(desc) {
+        this._description = desc;
     }
     get dueDate() {
         return this._dueDate;
     }
+    set dueDate(date) {
+        this._dueDate = date;
+    }
     get priority() {
         return this._priority;
     }
+    set priority(pri) {
+        this._priority = pri;
+    }
     get notes() {
         return this._notes;
+    }
+    set notes(note) {
+        this._notes = note;
     }
     set isDone(value) {
         this._isDone = value;
@@ -47,9 +62,16 @@ class Project {
         this.todoList[index].isDone = true;
     }
     removeTodo(index) {
-        console.log(this.todoList);
         this.todoList.splice(index, 1);
-        console.log(this.todoList);
+    }
+    editTodo(index, title, description, dueDate, priority, notes, isDone) {
+        const targetTodo = this.todoList[index];
+        targetTodo.title = title;
+        targetTodo.description = description;
+        targetTodo.dueDate = dueDate;
+        targetTodo.priority = priority;
+        targetTodo.notes = notes;
+        targetTodo.isDone = isDone;
     }
 }
 
@@ -74,4 +96,8 @@ export class ProjectList {
     removeTodoFromProject(projectIndex, todoIndex) {
         this.projects[projectIndex].removeTodo(todoIndex);
     }
+
+    editTodoInProject(projectIndex, todoIndex, title, description, dueDate, priority, notes, isDone) {
+        this.projects[projectIndex].editTodo(todoIndex, title, description, dueDate, priority, notes, isDone);
+    } 
 }
