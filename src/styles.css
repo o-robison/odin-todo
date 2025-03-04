@@ -1,9 +1,35 @@
-div {
-    border: 1px solid rebeccapurple;
+:root {
+    --text-color: #001524;
+    --text-color-light: #404a52;
+    --brand-primary: #15616d;
+    --brand-secondary: #ff7d00;
+    --background-color: #ffecd1;
+    --white: #fff;
+}
+
+h1, h2, h3, h4 {
+    font-family: "Kiwi Maru", serif;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
 }
 
 #content {
+    margin: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.project {
+    background-color: var(--background-color);
+    padding: 8px;
+}
+
+.expandable {
     display: flex;
+    flex-direction: column;
 }
 
 .label-value {
@@ -11,6 +37,6 @@ div {
     flex-direction: column;
 }
 
-.expandable {
-    display: flex;
+.label {
+    font-weight: 600;
 }

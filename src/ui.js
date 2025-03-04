@@ -9,6 +9,7 @@ export class ScreenController {
     draw(projectList) {
         for(const project of projectList.projects) {
             const listDiv = document.createElement("div");
+            listDiv.classList.add("project");
             const listTitle = document.createElement("h2");
             const list = document.createElement("div");
             list.classList.add("todo-list");
@@ -19,9 +20,20 @@ export class ScreenController {
                 const todoDiv = document.createElement("div");
                 todoDiv.classList.add("todo-item");
                 
+                const todoTitleDiv = document.createElement("div");
+                todoTitleDiv.classList.add("todo-title");
+                this.drawMaterialIconButton(todoTitleDiv, "expand_circle_down");
+
+                const buttonRow = document.createElement("div");
+                buttonRow.classList.add("button-row");
+                this.drawMaterialIconButton(buttonRow, "edit");
+                this.drawMaterialIconButton(buttonRow, "remove");
+
                 const todoTitle = document.createElement("h3");
                 todoTitle.innerHTML = todo.title;
-                todoDiv.appendChild(todoTitle);
+                todoTitleDiv.appendChild(todoTitle);
+                todoTitleDiv.appendChild(buttonRow);
+                todoDiv.appendChild(todoTitleDiv);
 
                 const expandDiv = document.createElement("div");
                 expandDiv.classList.add("expandable");
@@ -50,5 +62,12 @@ export class ScreenController {
         valueDiv.innerHTML = value;
         containerDiv.appendChild(valueDiv);
         target.appendChild(containerDiv);
+    }
+    drawMaterialIconButton(target, iconName) {
+        const myButton = document.createElement("button");
+        myButton.classList.add("icon-button");
+        myButton.classList.add("material-symbols-outlined");
+        myButton.textContent = iconName;
+        target.appendChild(myButton);
     }
 }
