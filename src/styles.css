@@ -27,6 +27,16 @@ body {
     padding: 8px;
 }
 
+.icon-button {
+    border: none;
+    background-color: transparent;
+    color: var(--brand-primary);
+}
+
+.todo-title {
+    display: flex;
+}
+
 .expandable {
     display: flex;
     flex-direction: column;

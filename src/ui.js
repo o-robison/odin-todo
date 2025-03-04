@@ -7,7 +7,7 @@ export class ScreenController {
         this._contentDiv.innerHTML = "";
     }
     draw(projectList) {
-        for(const project of projectList.projects) {
+        for(const [projIndex, project] of projectList.projects.entries()) {
             const listDiv = document.createElement("div");
             listDiv.classList.add("project");
             const listTitle = document.createElement("h2");
@@ -16,18 +16,20 @@ export class ScreenController {
             listTitle.innerHTML = project.name;
             listDiv.appendChild(listTitle);
             
-            for(const todo of project.todoList) {
+            for(const [listIndex, todo] of project.todoList.entries()) {
                 const todoDiv = document.createElement("div");
                 todoDiv.classList.add("todo-item");
                 
                 const todoTitleDiv = document.createElement("div");
                 todoTitleDiv.classList.add("todo-title");
-                this.drawMaterialIconButton(todoTitleDiv, "expand_circle_down");
+                const listenButton = this.drawMaterialIconButton(todoTitleDiv, "expand_circle_down", projIndex, listIndex);
+                console.log(listenButton);
+                listenButton.addEventListener("click", this.toggleExpandableVisibility);
 
                 const buttonRow = document.createElement("div");
                 buttonRow.classList.add("button-row");
-                this.drawMaterialIconButton(buttonRow, "edit");
-                this.drawMaterialIconButton(buttonRow, "remove");
+                this.drawMaterialIconButton(buttonRow, "edit", projIndex, listIndex);
+                this.drawMaterialIconButton(buttonRow, "remove", projIndex, listIndex);
 
                 const todoTitle = document.createElement("h3");
                 todoTitle.innerHTML = todo.title;
@@ -37,7 +39,8 @@ export class ScreenController {
 
                 const expandDiv = document.createElement("div");
                 expandDiv.classList.add("expandable");
-                
+                expandDiv.dataset.todoIndex = `${projIndex}${listIndex}`;
+                expandDiv.style.display = "none";
                 this.drawLabelValue(expandDiv, "Description:", todo.description);
                 this.drawLabelValue(expandDiv, "Due Date:", todo.dueDate);
                 this.drawLabelValue(expandDiv, "Priority:", todo.priority);
@@ -63,11 +66,20 @@ export class ScreenController {
         containerDiv.appendChild(valueDiv);
         target.appendChild(containerDiv);
     }
-    drawMaterialIconButton(target, iconName) {
+    drawMaterialIconButton(target, iconName, projIndex, listIndex) {
         const myButton = document.createElement("button");
         myButton.classList.add("icon-button");
         myButton.classList.add("material-symbols-outlined");
         myButton.textContent = iconName;
+        myButton.dataset.todoIndex = `${projIndex}${listIndex}`;
         target.appendChild(myButton);
+        return myButton;
+    }
+    toggleExpandableVisibility(e) {
+        const index = e.currentTarget.dataset.todoIndex;
+        const target = document.querySelector(`.expandable[data-todo-index="${index}"]`);
+        console.log(target);
+        if(target.style.display === "flex") target.style.display = "none";
+        else target.style.display = "flex";
     }
 }
