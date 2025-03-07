@@ -17,6 +17,7 @@ export class ScreenController {
         for(const [projIndex, project] of this.projectList.projects.entries()) {
             const listDiv = document.createElement("div");
             listDiv.classList.add("project");
+            listDiv.id = `proj${projIndex}`;
             const listTitle = document.createElement("h2");
             const list = document.createElement("div");
             list.classList.add("todo-list");
@@ -56,13 +57,15 @@ export class ScreenController {
             }
             const newTodoButton = document.createElement("button");
             newTodoButton.classList.add("new-button");
+            newTodoButton.dataset.projectIndex = `${projIndex}`;
             newTodoButton.textContent = "Add Todo";
-            newTodoButton.addEventListener("click", this.showNewTodoModal);
+            newTodoButton.addEventListener("click", this.showNewTodoForm);
             list.appendChild(newTodoButton);
 
             listDiv.appendChild(list);
             this.contentDiv.appendChild(listDiv);
         }
+
     }
     drawLabelValue(target, label, value) {
         const containerDiv = document.createElement("div");
@@ -99,6 +102,76 @@ export class ScreenController {
         this.reset();
         this.draw();
     }
+    showNewTodoForm(e){
+        const indexStr = e.currentTarget.dataset.projectIndex;
+        const listDiv = document.querySelector(`#proj${indexStr}`);
+        const addButton = e.currentTarget;
+        addButton.style.display = "none";
+        const newForm = document.createElement("form");
+        const formData = [
+            {
+                type: "text",
+                id: "todoTitle",
+                label: "* Title"
+            },
+            {
+                type: "textarea",
+                id: "todoDescription",
+                label: "* Description"
+            },
+            {
+                type: "date",
+                id: "dueDate",
+                label: "* Due Date"
+            },
+            {
+                type: "select",
+                id: "priority",
+                label: "* Priority",
+                options: ["Low", "Medium", "High", "Immediate"]
+            },
+            {
+                type: "textarea",
+                id: "notes",
+                label: "Notes"
+            },
+        ];
+        for(const element of formData) {
+            const rowDiv  = document.createElement("div");
+            rowDiv.classList.add("formRow");
+            const label = document.createElement("label");
+            label.htmlFor = element.id;
+            label.textContent = element.label;
+            rowDiv.appendChild(label);
+            if(element.type==="textarea") {
+                const textarea = document.createElement("textarea");
+                textarea.name = textarea.id = element.id;
+                rowDiv.appendChild(textarea);
+            }
+            else if(element.type==="select") {
+                const select = document.createElement("select");
+                select.name = select.id = element.id;
+                for(const option of element.options) {
+                    const newOption = document.createElement("option");
+                    newOption.textContent = newOption.value = option;
+                    select.appendChild(newOption);
+                }
+                rowDiv.appendChild(select);
+            }
+            else {
+                const input = document.createElement("input");
+                input.type = element.type;
+                input.id = element.id;
+                rowDiv.appendChild(input);
+            }
+            newForm.appendChild(rowDiv);
+        }
+        const submitButton = document.createElement("button");
+        submitButton.id = "submitTodo";
+        submitButton.textContent = "Submit To Do";
+        newForm.appendChild(submitButton);
+        listDiv.appendChild(newForm);
+    }
     editTodo(e){
         const indexStr = e.currentTarget.dataset.todoIndex;
         const indexArray = indexStr.split("");
@@ -111,10 +184,6 @@ export class ScreenController {
         this.projectList.editTodoInProject(indexArray[0], indexArray[1], title, desc, date, priority, note, isDone);
         this.reset();
         this.draw();
-    }
-    showNewTodoModal() {
-        const todoModal = document.querySelector("#newTodo");
-        todoModal.showModal();
     }
     showNewProjectModal() {
         const projectModal = document.querySelector("#newProject");
