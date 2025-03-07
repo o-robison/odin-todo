@@ -27,6 +27,7 @@ export class ScreenController {
             for(const [listIndex, todo] of project.todoList.entries()) {
                 const todoDiv = document.createElement("div");
                 todoDiv.classList.add("todo-item");
+                todoDiv.dataset.todoIndex = `${projIndex}${listIndex}`;
                 
                 const todoTitleDiv = document.createElement("div");
                 todoTitleDiv.classList.add("todo-title");
@@ -34,7 +35,7 @@ export class ScreenController {
 
                 const buttonRow = document.createElement("div");
                 buttonRow.classList.add("button-row");
-                this.drawMaterialIconButton(buttonRow, "edit", projIndex, listIndex, this.editTodo.bind(this));
+                this.drawMaterialIconButton(buttonRow, "edit", projIndex, listIndex, this.showEditTodoForm.bind(this));
                 this.drawMaterialIconButton(buttonRow, "remove", projIndex, listIndex, this.removeTodo.bind(this));
 
                 const todoTitle = document.createElement("h3");
@@ -109,7 +110,7 @@ export class ScreenController {
         addButton.style.display = "none";
         this.drawTodoFormInTarget(listDiv, indexStr, this.addTodo.bind(this));
     }
-    drawTodoFormInTarget(target, projIndex, callback) {
+    drawTodoFormInTarget(target, index, callback) {
         const newForm = document.createElement("form");
         const formData = [
             {
@@ -172,15 +173,17 @@ export class ScreenController {
         const submitButton = document.createElement("button");
         submitButton.id = "submitTodo";
         submitButton.textContent = "Submit To Do";
-        submitButton.dataset.projectIndex = projIndex;
+        if(index.length===1) submitButton.dataset.projectIndex = index;
+        else submitButton.dataset.todoIndex = index;
         submitButton.addEventListener("click", callback);
         newForm.appendChild(submitButton);
         target.appendChild(newForm);
     }
-    editTodo(e){
+    showEditTodoForm(e){
         e.preventDefault();
         const indexStr = e.currentTarget.dataset.todoIndex;
-        const indexArray = indexStr.split("");
+        const targetDiv = document.querySelector('.todo-item[data-todo-index="'+indexStr+'"]');
+        this.drawTodoFormInTarget(targetDiv, indexStr, this.submitEditedTodo.bind(this));
         
     }
     getValuesOfTodoForm() {
@@ -194,6 +197,9 @@ export class ScreenController {
         return returnObj;
     }
     submitEditedTodo(e){
+        e.preventDefault();
+        const indexStr = e.currentTarget.dataset.todoIndex;
+        const indexArray = indexStr.split("");
         const title = "testTitle";
         const desc = "test description";
         const date = new Date().toLocaleDateString();
