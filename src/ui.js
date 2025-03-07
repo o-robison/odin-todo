@@ -181,6 +181,19 @@ export class ScreenController {
         e.preventDefault();
         const indexStr = e.currentTarget.dataset.todoIndex;
         const indexArray = indexStr.split("");
+        
+    }
+    getValuesOfTodoForm() {
+        let returnObj = {};
+        returnObj["title"] = document.querySelector("#todoTitle").value;
+        returnObj["desc"] = document.querySelector("#todoDescription").value;
+        const date = document.querySelector("#dueDate").value;
+        returnObj["date"] = new Date(date).toLocaleDateString();
+        returnObj["priority"] = document.querySelector("#priority").value;
+        returnObj["note"] = document.querySelector("#notes").value;
+        return returnObj;
+    }
+    submitEditedTodo(e){
         const title = "testTitle";
         const desc = "test description";
         const date = new Date().toLocaleDateString();
@@ -194,14 +207,9 @@ export class ScreenController {
     addTodo(e) {
         e.preventDefault();
         const indexStr = e.currentTarget.dataset.projectIndex;
-        const title = document.querySelector("#todoTitle").value;
-        const desc = document.querySelector("#todoDescription").value;
-        const date = document.querySelector("#dueDate").value;
-        const formattedDate = new Date(date).toLocaleDateString();
-        const priority = document.querySelector("#priority").value;
-        const note = document.querySelector("#notes").value;
+        const formValues = this.getValuesOfTodoForm();
         const isDone = false;
-        this.projectList.addTodoToProject(indexStr, title, desc, formattedDate, priority, note, isDone);
+        this.projectList.addTodoToProject(indexStr, formValues.title, formValues.desc, formValues.date, formValues.priority, formValues.note, isDone);
         this.reset();
         this.draw();
     }
