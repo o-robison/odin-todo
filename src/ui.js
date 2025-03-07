@@ -59,7 +59,7 @@ export class ScreenController {
             newTodoButton.classList.add("new-button");
             newTodoButton.dataset.projectIndex = `${projIndex}`;
             newTodoButton.textContent = "Add Todo";
-            newTodoButton.addEventListener("click", this.showNewTodoForm);
+            newTodoButton.addEventListener("click", this.showNewTodoForm.bind(this));
             list.appendChild(newTodoButton);
 
             listDiv.appendChild(list);
@@ -169,10 +169,13 @@ export class ScreenController {
         const submitButton = document.createElement("button");
         submitButton.id = "submitTodo";
         submitButton.textContent = "Submit To Do";
+        submitButton.dataset.projectIndex = indexStr;
+        submitButton.addEventListener("click", this.addTodo.bind(this));
         newForm.appendChild(submitButton);
         listDiv.appendChild(newForm);
     }
     editTodo(e){
+        e.preventDefault();
         const indexStr = e.currentTarget.dataset.todoIndex;
         const indexArray = indexStr.split("");
         const title = "testTitle";
@@ -182,6 +185,19 @@ export class ScreenController {
         const note = "test note";
         const isDone = true;
         this.projectList.editTodoInProject(indexArray[0], indexArray[1], title, desc, date, priority, note, isDone);
+        this.reset();
+        this.draw();
+    }
+    addTodo(e) {
+        e.preventDefault();
+        const indexStr = e.currentTarget.dataset.projectIndex;
+        const title = "testTitle";
+        const desc = "test description";
+        const date = new Date().toLocaleDateString();
+        const priority = "test priority";
+        const note = "test note";
+        const isDone = true;
+        this.projectList.addTodoToProject(Number(indexStr), title, desc, date, priority, note, isDone);
         this.reset();
         this.draw();
     }
