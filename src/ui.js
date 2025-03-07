@@ -107,6 +107,9 @@ export class ScreenController {
         const listDiv = document.querySelector(`#proj${indexStr}`);
         const addButton = e.currentTarget;
         addButton.style.display = "none";
+        this.drawTodoFormInTarget(listDiv, indexStr, this.addTodo.bind(this));
+    }
+    drawTodoFormInTarget(target, projIndex, callback) {
         const newForm = document.createElement("form");
         const formData = [
             {
@@ -169,10 +172,10 @@ export class ScreenController {
         const submitButton = document.createElement("button");
         submitButton.id = "submitTodo";
         submitButton.textContent = "Submit To Do";
-        submitButton.dataset.projectIndex = indexStr;
-        submitButton.addEventListener("click", this.addTodo.bind(this));
+        submitButton.dataset.projectIndex = projIndex;
+        submitButton.addEventListener("click", callback);
         newForm.appendChild(submitButton);
-        listDiv.appendChild(newForm);
+        target.appendChild(newForm);
     }
     editTodo(e){
         e.preventDefault();
