@@ -191,13 +191,14 @@ export class ScreenController {
     addTodo(e) {
         e.preventDefault();
         const indexStr = e.currentTarget.dataset.projectIndex;
-        const title = "testTitle";
-        const desc = "test description";
-        const date = new Date().toLocaleDateString();
-        const priority = "test priority";
-        const note = "test note";
-        const isDone = true;
-        this.projectList.addTodoToProject(Number(indexStr), title, desc, date, priority, note, isDone);
+        const title = document.querySelector("#todoTitle").value;
+        const desc = document.querySelector("#todoDescription").value;
+        const date = document.querySelector("#dueDate").value;
+        const formattedDate = new Date(date).toLocaleDateString();
+        const priority = document.querySelector("#priority").value;
+        const note = document.querySelector("#notes").value;
+        const isDone = false;
+        this.projectList.addTodoToProject(indexStr, title, desc, formattedDate, priority, note, isDone);
         this.reset();
         this.draw();
     }
