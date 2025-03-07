@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>To-Do List</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
@@ -12,10 +12,48 @@
 <body>
     <header>
         <img src="./logo.png" alt="Logo">
-        <nav>
-            
-        </nav>
     </header>
     <div id="content"></div>
+    <dialog id="newTodo">
+        <form action="#">
+            <div class="formRow">
+                <label for="todoTitle">*Title</label>
+                <input type="text" id="todoTitle">
+            </div>
+            <div class="formRow">
+                <label for="todoDescription">*Description</label>
+                <textarea name="todoDescription" id="todoDescription"></textarea>
+            </div>
+            <div class="formRow">
+                <label for="dueDate">*Due Date</label>
+                <input type="date" id="dueDate">
+            </div>
+            <div class="formRow">
+                <label for="priority">*Priority</label>
+                <select name="priority" id="priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="immediate">Immediate</option>
+                </select>
+            </div>
+            <div class="formRow">
+                <label for="notes">Notes</label>
+                <textarea name="notes" id="notes"></textarea>
+            </div>
+            <button id="submitTodo">Create To-Do</button>
+        </form>
+    </dialog>
+
+    <dialog id="newProject">
+        <form action="#">
+            <div class="formRow">
+                <label for="projectTitle">*Project Title</label>
+                <input type="text" id="projectTitle">
+            </div>
+            <button id="submitProject">Create Project</button>
+        </form>
+    </dialog>
+    
 </body>
 </html>

@@ -52,8 +52,14 @@ export class ScreenController {
                 this.drawLabelValue(expandDiv, "Notes:", todo.notes);
 
                 todoDiv.appendChild(expandDiv);
-                listDiv.appendChild(todoDiv);
+                list.appendChild(todoDiv);
             }
+            const newTodoButton = document.createElement("button");
+            newTodoButton.classList.add("new-button");
+            newTodoButton.textContent = "Add Todo";
+            newTodoButton.addEventListener("click", this.showNewTodoModal);
+            list.appendChild(newTodoButton);
+
             listDiv.appendChild(list);
             this.contentDiv.appendChild(listDiv);
         }
@@ -94,7 +100,6 @@ export class ScreenController {
         this.draw();
     }
     editTodo(e){
-        //show edit window
         const indexStr = e.currentTarget.dataset.todoIndex;
         const indexArray = indexStr.split("");
         const title = "testTitle";
@@ -106,5 +111,13 @@ export class ScreenController {
         this.projectList.editTodoInProject(indexArray[0], indexArray[1], title, desc, date, priority, note, isDone);
         this.reset();
         this.draw();
+    }
+    showNewTodoModal() {
+        const todoModal = document.querySelector("#newTodo");
+        todoModal.showModal();
+    }
+    showNewProjectModal() {
+        const projectModal = document.querySelector("#newProject");
+        projectModal.showModal();
     }
 }
