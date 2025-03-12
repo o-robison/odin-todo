@@ -110,17 +110,17 @@ export class ScreenController {
         addButton.style.display = "none";
         this.drawTodoFormInTarget(listDiv, indexStr, this.addTodo.bind(this));
     }
-    drawTodoFormInTarget(target, index, callback) {
+    drawTodoFormInTarget(target, index, callback, values=null) {
         const newForm = document.createElement("form");
         const formData = [
             {
                 type: "text",
-                id: "todoTitle",
+                id: "title",
                 label: "* Title"
             },
             {
                 type: "textarea",
-                id: "todoDescription",
+                id: "description",
                 label: "* Description"
             },
             {
@@ -150,6 +150,9 @@ export class ScreenController {
             if(element.type==="textarea") {
                 const textarea = document.createElement("textarea");
                 textarea.name = textarea.id = element.id;
+                if(values!=null) {
+                    textarea.value = values[element.id];
+                }
                 rowDiv.appendChild(textarea);
             }
             else if(element.type==="select") {
@@ -160,12 +163,24 @@ export class ScreenController {
                     newOption.textContent = newOption.value = option;
                     select.appendChild(newOption);
                 }
+                if(values!=null){
+                    const capitalizedValue = values[element.id].charAt(0).toUpperCase() + values[element.id].slice(1);
+                    select.value = capitalizedValue;
+                }
                 rowDiv.appendChild(select);
             }
             else {
                 const input = document.createElement("input");
                 input.type = element.type;
                 input.id = element.id;
+                if(values!=null) {
+                    if(element.type==="date") {
+                        const newDate = new Date(values[element.id]);
+                        input.value = newDate.toISOString().substring(0,10);
+                    } else {
+                        input.value = values[element.id];
+                    }
+                }
                 rowDiv.appendChild(input);
             }
             newForm.appendChild(rowDiv);
@@ -183,13 +198,14 @@ export class ScreenController {
         e.preventDefault();
         const indexStr = e.currentTarget.dataset.todoIndex;
         const targetDiv = document.querySelector('.todo-item[data-todo-index="'+indexStr+'"]');
-        this.drawTodoFormInTarget(targetDiv, indexStr, this.submitEditedTodo.bind(this));
-        
+        const indexArray = indexStr.split("");
+        const currentValues = this.projectList.getTodoValuesFromProject(indexArray[0], indexArray[1]);
+        this.drawTodoFormInTarget(targetDiv, indexStr, this.submitEditedTodo.bind(this), currentValues);
     }
     getValuesOfTodoForm() {
         let returnObj = {};
-        returnObj["title"] = document.querySelector("#todoTitle").value;
-        returnObj["desc"] = document.querySelector("#todoDescription").value;
+        returnObj["title"] = document.querySelector("#title").value;
+        returnObj["desc"] = document.querySelector("#description").value;
         const date = document.querySelector("#dueDate").value;
         returnObj["date"] = new Date(date).toLocaleDateString();
         returnObj["priority"] = document.querySelector("#priority").value;
@@ -200,13 +216,8 @@ export class ScreenController {
         e.preventDefault();
         const indexStr = e.currentTarget.dataset.todoIndex;
         const indexArray = indexStr.split("");
-        const title = "testTitle";
-        const desc = "test description";
-        const date = new Date().toLocaleDateString();
-        const priority = "test priority";
-        const note = "test note";
-        const isDone = true;
-        this.projectList.editTodoInProject(indexArray[0], indexArray[1], title, desc, date, priority, note, isDone);
+        const values = this.getValuesOfTodoForm();
+        this.projectList.editTodoInProject(indexArray[0], indexArray[1], values["title"], values["desc"], values["date"], values["priority"], values["note"]);
         this.reset();
         this.draw();
     }

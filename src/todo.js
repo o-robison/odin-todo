@@ -37,6 +37,9 @@ class Todo {
     set notes(note) {
         this._notes = note;
     }
+    get isDone() {
+        return this._isDone;
+    }
     set isDone(value) {
         this._isDone = value;
     }
@@ -64,14 +67,24 @@ class Project {
     removeTodo(index) {
         this.todoList.splice(index, 1);
     }
-    editTodo(index, title, description, dueDate, priority, notes, isDone) {
+    editTodo(index, title, description, dueDate, priority, notes) {
         const targetTodo = this.todoList[index];
         targetTodo.title = title;
         targetTodo.description = description;
         targetTodo.dueDate = dueDate;
         targetTodo.priority = priority;
         targetTodo.notes = notes;
-        targetTodo.isDone = isDone;
+    }
+    getTodoValues(todoIndex) {
+        let returnObj = {};
+        let targetTodo = this.todoList[todoIndex];
+        returnObj["title"] = targetTodo.title;
+        returnObj["description"] = targetTodo.description;
+        returnObj["dueDate"] = targetTodo.dueDate;
+        returnObj["priority"] = targetTodo.priority;
+        returnObj["notes"] = targetTodo.notes;
+        returnObj["isDone"] = targetTodo.isDone;
+        return returnObj;
     }
 }
 
@@ -97,7 +110,11 @@ export class ProjectList {
         this.projects[projectIndex].removeTodo(todoIndex);
     }
 
-    editTodoInProject(projectIndex, todoIndex, title, description, dueDate, priority, notes, isDone) {
-        this.projects[projectIndex].editTodo(todoIndex, title, description, dueDate, priority, notes, isDone);
+    editTodoInProject(projectIndex, todoIndex, title, description, dueDate, priority, notes) {
+        this.projects[projectIndex].editTodo(todoIndex, title, description, dueDate, priority, notes);
     } 
+
+    getTodoValuesFromProject(projectIndex, todoIndex){
+        return this.projects[projectIndex].getTodoValues(todoIndex);
+    }
 }
