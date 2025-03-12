@@ -67,6 +67,11 @@ export class ScreenController {
             this.contentDiv.appendChild(listDiv);
         }
 
+        const addProjectButton = document.createElement("button");
+        addProjectButton.textContent = "Create New Project";
+        addProjectButton.addEventListener("click", this.showNewProjectModal.bind(this));
+        this.contentDiv.appendChild(addProjectButton);
+
     }
     drawLabelValue(target, label, value) {
         const containerDiv = document.createElement("div");
@@ -233,5 +238,18 @@ export class ScreenController {
     showNewProjectModal() {
         const projectModal = document.querySelector("#newProject");
         projectModal.showModal();
+        const submitButton = document.querySelector("#submitProject");
+        submitButton.addEventListener("click", this.createNewProject.bind(this));
     }
+    createNewProject(e){
+        e.preventDefault();
+        console.log("made it");
+        const projectTitle = document.querySelector("#projectTitle").value;
+        this.projectList.addProject(projectTitle);
+        const projectModal = document.querySelector("#newProject");
+        projectModal.close();
+        this.reset();
+        this.draw();
+    }
+
 }
