@@ -31,12 +31,18 @@ export class ScreenController {
                 
                 const todoTitleDiv = document.createElement("div");
                 todoTitleDiv.classList.add("todo-title");
-                const listenButton = this.drawMaterialIconButton(todoTitleDiv, "expand_circle_down", projIndex, listIndex, this.toggleExpandableVisibility);
+                
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.dataset.index = `${projIndex}${listIndex}`;
+                checkbox.addEventListener("click", this.toggleCheckedTodo.bind(this));
+                todoTitleDiv.appendChild(checkbox);
 
                 const buttonRow = document.createElement("div");
                 buttonRow.classList.add("button-row");
                 this.drawMaterialIconButton(buttonRow, "edit", projIndex, listIndex, this.showEditTodoForm.bind(this));
                 this.drawMaterialIconButton(buttonRow, "remove", projIndex, listIndex, this.removeTodo.bind(this));
+                this.drawMaterialIconButton(buttonRow, "expand_circle_down", projIndex, listIndex, this.toggleExpandableVisibility);
 
                 const todoTitle = document.createElement("h3");
                 todoTitle.innerHTML = todo.title;
@@ -69,6 +75,7 @@ export class ScreenController {
 
         const addProjectButton = document.createElement("button");
         addProjectButton.textContent = "Create New Project";
+        addProjectButton.classList.add("new-button");
         addProjectButton.addEventListener("click", this.showNewProjectModal.bind(this));
         this.contentDiv.appendChild(addProjectButton);
 
@@ -117,6 +124,7 @@ export class ScreenController {
     }
     drawTodoFormInTarget(target, index, callback, values=null) {
         const newForm = document.createElement("form");
+        newForm.classList.add("new-todo-form");
         const formData = [
             {
                 type: "text",
@@ -243,7 +251,6 @@ export class ScreenController {
     }
     createNewProject(e){
         e.preventDefault();
-        console.log("made it");
         const projectTitle = document.querySelector("#projectTitle").value;
         this.projectList.addProject(projectTitle);
         const projectModal = document.querySelector("#newProject");
@@ -251,5 +258,10 @@ export class ScreenController {
         this.reset();
         this.draw();
     }
-
+    toggleCheckedTodo(e) {
+        const indexStr = e.currentTarget.dataset.index;
+        const indexArray = indexStr.split("");
+        const checkedValue = e.currentTarget.value;
+        this.projectList.toggleTodoCheckedInProject(indexArray[0], indexArray[1], checkedValue);
+    }
 }

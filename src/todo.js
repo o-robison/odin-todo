@@ -61,8 +61,8 @@ class Project {
         const newTodo = new Todo(title, description, dueDate, priority, notes);
         this.todoList.push(newTodo);
     }
-    completeTodo(index) {
-        this.todoList[index].isDone = true;
+    toggleChecked(index, value) {
+        this.todoList[index].isDone = value;
     }
     removeTodo(index) {
         this.todoList.splice(index, 1);
@@ -116,5 +116,9 @@ export class ProjectList {
 
     getTodoValuesFromProject(projectIndex, todoIndex){
         return this.projects[projectIndex].getTodoValues(todoIndex);
+    }
+
+    toggleTodoCheckedInProject(projectIndex, todoIndex, checkedValue) {
+        this.projects[projectIndex].toggleChecked(todoIndex, checkedValue);
     }
 }
