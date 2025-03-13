@@ -70,7 +70,7 @@ body {
     font-weight: 600;
 }
 
-.new-button, #submitTodo {
+.new-button, #submitTodo, #submitProject {
     border: none;
     background-color: var(--brand-secondary);
     color: var(--white);
@@ -94,4 +94,17 @@ body {
 
 label {
     font-weight: 600;
+}
+
+#newProject {
+    height: 300px;
+    width: 300px;
+    background-color: var(--background-color);
+    margin: 150px auto;
+}
+
+#newProject > form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
